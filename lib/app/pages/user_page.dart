@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getx_crud/app/controller/user_controller.dart';
@@ -11,13 +13,34 @@ class UserPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('User Page'),
-        actions: [
-          IconButton(
-              icon: Icon(Icons.add), onPressed: () => Get.to(UserInputPage())),
-        ],
-      ),
-    );
+        appBar: AppBar(
+          title: const Text('User Page'),
+          actions: [
+            IconButton(
+                icon: const Icon(Icons.add),
+                onPressed: () => Get.to(UserInputPage())),
+          ],
+        ),
+        body: Obx(
+          () => ListView.builder(
+              itemCount: controller.userController.length,
+              itemBuilder: (context, index) {
+                final user = controller.userController[index];
+                return Card(
+                  child: ListTile(
+                    leading: CircleAvatar(
+                      child: Center(
+                        child: Text('${user.id}'),
+                      ),
+                    ),
+                    title: Text(user.name),
+                    subtitle: Text(user.gender),
+                    trailing: index == 0 || index == 1
+                        ? Image.asset(user.profile)
+                        : Image.file(File(user.profile)),
+                  ),
+                );
+              }),
+        ));
   }
 }

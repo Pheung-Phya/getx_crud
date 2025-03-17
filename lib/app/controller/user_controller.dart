@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getx_crud/app/model/user.dart';
+import 'package:getx_crud/app/pages/user_page.dart';
 import 'package:image_picker/image_picker.dart';
 
 class UserController extends GetxController {
@@ -43,6 +44,26 @@ class UserController extends GetxController {
       }
     } catch (e) {
       Get.snackbar("Error", "Failed to pick an image",
+          snackPosition: SnackPosition.BOTTOM);
+    }
+  }
+
+  void addUser() {
+    try {
+      userController.add(User(
+          id: int.parse(controllerId.text),
+          name: controllerName.text,
+          gender: controllerGender.text,
+          profile: profile.string));
+
+      controllerId.clear();
+      controllerName.clear();
+      controllerGender.clear();
+      profile.value = null;
+      userController.refresh();
+      Get.snackbar("User", "User added successfully");
+    } catch (e) {
+      Get.snackbar("Error", "Failed to add user",
           snackPosition: SnackPosition.BOTTOM);
     }
   }

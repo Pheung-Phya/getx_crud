@@ -99,8 +99,7 @@ class UserInputPage extends StatelessWidget {
                         child: ElevatedButton(
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
-                              } else {
-                                Get.snackbar("Required", "merl pg");
+                                controller.addUser();
                               }
                             },
                             child: const Text('Create User')),
