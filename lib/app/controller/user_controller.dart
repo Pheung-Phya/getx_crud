@@ -4,11 +4,12 @@ import 'package:getx_crud/app/model/user.dart';
 import 'package:image_picker/image_picker.dart';
 
 class UserController extends GetxController {
-  final userController = [].obs;
+  final RxList<User> userController = <User>[].obs;
   TextEditingController controllerId = TextEditingController();
   TextEditingController controllerName = TextEditingController();
   TextEditingController controllerGender = TextEditingController();
   var profile = RxnString();
+  final ImagePicker _picker = ImagePicker();
 
   @override
   void onInit() {
@@ -17,7 +18,7 @@ class UserController extends GetxController {
   }
 
   void fetchUsers() {
-    userController.value = [
+    userController.assignAll([
       User(
           id: 1001,
           name: "Tola",
@@ -28,15 +29,21 @@ class UserController extends GetxController {
           name: "Thida",
           gender: "Female",
           profile: "assets/profile/boostrong.jpg")
-    ];
+    ]);
   }
 
-  final ImagePicker _picker = ImagePicker();
-
   Future<void> pickImage(ImageSource source) async {
-    final XFile? pickedFile = await _picker.pickImage(source: source);
-    if (pickedFile != null) {
-      profile.value = pickedFile.path;
+    try {
+      final XFile? pickedFile = await _picker.pickImage(source: source);
+      if (pickedFile != null) {
+        profile.value = pickedFile.path;
+      } else {
+        Get.snackbar("Image Picker", "No image selected",
+            snackPosition: SnackPosition.BOTTOM);
+      }
+    } catch (e) {
+      Get.snackbar("Error", "Failed to pick an image",
+          snackPosition: SnackPosition.BOTTOM);
     }
   }
 }
