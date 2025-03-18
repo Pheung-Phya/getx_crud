@@ -10,6 +10,9 @@ class UserController extends GetxController {
   TextEditingController controllerName = TextEditingController();
   TextEditingController controllerGender = TextEditingController();
   var profile = RxnString();
+  User? user;
+  int? editIndex;
+
   final ImagePicker _picker = ImagePicker();
 
   @override
@@ -31,6 +34,34 @@ class UserController extends GetxController {
           gender: "Female",
           profile: "assets/profile/boostrong.jpg")
     ]);
+  }
+
+  void clear() {
+    controllerId.clear();
+    controllerName.clear();
+    controllerGender.clear();
+    profile.value = null;
+    user = null;
+  }
+
+  void edit(int index) {
+    editIndex = index;
+    user = userController[index];
+    controllerId.text = userController[index].id.toString();
+    controllerName.text = userController[index].name;
+    controllerGender.text = userController[index].gender;
+    profile.value = userController[index].profile;
+  }
+
+  void userUpdate() {
+    if (editIndex != null) {
+      userController[editIndex!] = User(
+          id: int.parse(controllerId.text),
+          name: controllerName.text,
+          gender: controllerGender.text,
+          profile: profile.string);
+    }
+    clear();
   }
 
   Future<void> pickImage(ImageSource source) async {

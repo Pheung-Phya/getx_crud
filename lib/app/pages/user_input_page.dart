@@ -99,14 +99,19 @@ class UserInputPage extends StatelessWidget {
                         child: ElevatedButton(
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
-                                controller.addUser();
+                                controller.user == null
+                                    ? controller.addUser()
+                                    : controller.userUpdate();
                               }
                             },
-                            child: const Text('Create User')),
+                            child: controller.user == null
+                                ? const Text('Create User')
+                                : const Text('Update User')),
                       ),
                       const SizedBox(width: 10),
                       ElevatedButton(
                         onPressed: () {
+                          controller.clear();
                           Get.back();
                         },
                         child: const Text('Cancel'),

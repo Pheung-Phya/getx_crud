@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getx_crud/app/controller/user_controller.dart';
@@ -26,18 +25,32 @@ class UserPage extends StatelessWidget {
               itemCount: controller.userController.length,
               itemBuilder: (context, index) {
                 final user = controller.userController[index];
-                return Card(
-                  child: ListTile(
-                    leading: CircleAvatar(
-                      child: Center(
-                        child: Text('${user.id}'),
+                return InkWell(
+                  onTap: () {
+                    controller.edit(index);
+                    Get.to(UserInputPage());
+                  },
+                  child: Card(
+                    child: ListTile(
+                      leading: CircleAvatar(
+                        child: Center(
+                          child: Text('${user.id}'),
+                        ),
                       ),
+                      title: Text(user.name),
+                      subtitle: Text(user.gender),
+                      trailing: index == 0 || index == 1
+                          ? Image.asset(
+                              user.profile,
+                              fit: BoxFit.cover,
+                            )
+                          : Image.file(
+                              File(
+                                user.profile,
+                              ),
+                              fit: BoxFit.cover,
+                            ),
                     ),
-                    title: Text(user.name),
-                    subtitle: Text(user.gender),
-                    trailing: index == 0 || index == 1
-                        ? Image.asset(user.profile)
-                        : Image.file(File(user.profile)),
                   ),
                 );
               }),
