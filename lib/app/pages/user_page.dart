@@ -30,26 +30,39 @@ class UserPage extends StatelessWidget {
                     controller.edit(index);
                     Get.to(UserInputPage());
                   },
-                  child: Card(
-                    child: ListTile(
-                      leading: CircleAvatar(
-                        child: Center(
-                          child: Text('${user.id}'),
+                  child: Dismissible(
+                    direction: DismissDirection.endToStart,
+                    background: Container(
+                        color: Colors.red,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [Icon(Icons.delete)],
+                        )),
+                    onDismissed: (direction) {
+                      controller.deleteUser(index);
+                    },
+                    key: UniqueKey(),
+                    child: Card(
+                      child: ListTile(
+                        leading: CircleAvatar(
+                          child: Center(
+                            child: Text('${user.id}'),
+                          ),
                         ),
-                      ),
-                      title: Text(user.name),
-                      subtitle: Text(user.gender),
-                      trailing: index == 0 || index == 1
-                          ? Image.asset(
-                              user.profile,
-                              fit: BoxFit.cover,
-                            )
-                          : Image.file(
-                              File(
+                        title: Text(user.name),
+                        subtitle: Text(user.gender),
+                        trailing: index == 0 || index == 1
+                            ? Image.asset(
                                 user.profile,
+                                fit: BoxFit.cover,
+                              )
+                            : Image.file(
+                                File(
+                                  user.profile,
+                                ),
+                                fit: BoxFit.cover,
                               ),
-                              fit: BoxFit.cover,
-                            ),
+                      ),
                     ),
                   ),
                 );

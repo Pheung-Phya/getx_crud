@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getx_crud/app/model/user.dart';
-import 'package:getx_crud/app/pages/user_page.dart';
 import 'package:image_picker/image_picker.dart';
 
 class UserController extends GetxController {
@@ -19,6 +18,11 @@ class UserController extends GetxController {
   void onInit() {
     super.onInit();
     fetchUsers();
+  }
+
+  @override
+  void onClose() {
+    clear();
   }
 
   void fetchUsers() {
@@ -42,24 +46,27 @@ class UserController extends GetxController {
     controllerGender.clear();
     profile.value = null;
     user = null;
+    editIndex = null;
   }
 
   void edit(int index) {
     editIndex = index;
     user = userController[index];
-    controllerId.text = userController[index].id.toString();
-    controllerName.text = userController[index].name;
-    controllerGender.text = userController[index].gender;
-    profile.value = userController[index].profile;
+    controllerId.text = user!.id.toString();
+    controllerName.text = user!.name;
+    controllerGender.text = user!.gender;
+    profile.value = user!.profile;
   }
 
   void userUpdate() {
     if (editIndex != null) {
       userController[editIndex!] = User(
-          id: int.parse(controllerId.text),
-          name: controllerName.text,
-          gender: controllerGender.text,
-          profile: profile.string);
+        id: int.parse(controllerId.text),
+        name: controllerName.text,
+        gender: controllerGender.text,
+        profile: profile.string,
+      );
+      Get.snackbar("User", "User updated successfully");
     }
     clear();
   }
@@ -82,20 +89,23 @@ class UserController extends GetxController {
   void addUser() {
     try {
       userController.add(User(
-          id: int.parse(controllerId.text),
-          name: controllerName.text,
-          gender: controllerGender.text,
-          profile: profile.string));
+        id: int.parse(controllerId.text),
+        name: controllerName.text,
+        gender: controllerGender.text,
+        profile: profile.string,
+      ));
 
-      controllerId.clear();
-      controllerName.clear();
-      controllerGender.clear();
-      profile.value = null;
+      clear();
       userController.refresh();
       Get.snackbar("User", "User added successfully");
     } catch (e) {
       Get.snackbar("Error", "Failed to add user",
           snackPosition: SnackPosition.BOTTOM);
     }
+  }
+
+  void deleteUser(int index) {
+    userController.removeAt(index);
+    Get.snackbar("User Deleted", "User has been removed");
   }
 }
