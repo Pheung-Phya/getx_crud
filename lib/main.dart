@@ -34,6 +34,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:getx_crud/app1/controllers/theme_controller.dart';
 import 'package:getx_crud/app3/controllers/translate_controller.dart';
 import 'package:getx_crud/app3/pages/home_page.dart';
 import 'package:getx_crud/app3/translate/translation.dart';
@@ -48,6 +49,7 @@ class MyApp extends StatelessWidget {
 
   final TranslateController translateController =
       Get.put(TranslateController());
+  final ThemeController themeController = Get.put(ThemeController());
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +57,11 @@ class MyApp extends StatelessWidget {
           translations: Translation(),
           locale: translateController.currentLocale.value,
           fallbackLocale: const Locale('en'),
+          theme: ThemeData.light(),
+          themeMode: themeController.isDarkMode.value
+              ? ThemeMode.dark
+              : ThemeMode.light,
+          darkTheme: ThemeData.dark(),
           home: HomePage(),
         ));
   }
